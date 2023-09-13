@@ -1,0 +1,268 @@
+﻿@model NewsApp.Models.NewsIndexViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<br />
+
+<div class="row mb-2">
+    <form method="get" class="col-4" asp-controller="News" asp-action="Index">
+        <input type="hidden" name="search" value="@Model.Search" />
+        <input type="hidden" name="pageSize" value="@Model.PageSize" />
+        <input type="hidden" name="pageNumber" value="@Model.PageNumber" />
+
+        <select class="form-control" name="authorId" onchange="this.form.submit()" asp-items="ViewBag.Authors">
+            <option value="@null">All Authors</option>
+        </select>
+    </form>
+
+    <form method="get" asp-controller="News" asp-action="Index" class="col-4 mb-2" id="search-form">
+        <input type="hidden" name="authorId" value="@ViewBag.AuthorId" />
+
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search" name="search" value="@Model.Search">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <form method="get" class="col-4" asp-controller="News" asp-action="Index">
+        <div class="input-group">
+            <input type="hidden" name="authorId" value="@ViewBag.AuthorId" />
+            <input type="hidden" name="search" value="@Model.Search" />
+
+            <div class="form-group">
+                <select id="pageSize" name="pageSize" class="form-control custom-select col-1">
+                    <option value="3" selected="@(Model.PageSize == 3)">3</option>
+                    <option value="5" selected="@(Model.PageSize == 5)">5</option>
+                    <option value="10" selected="@(Model.PageSize == 10)">10</option>
+                    <option value="20" selected="@(Model.PageSize == 20)">20</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success input-group-append col-1"><i class="bi bi-caret-right-fill"></i></button>
+        </div>
+    </form>
+</div>
+<p>
+    <a class="btn btn-success" asp-action="Create">Create New</a>
+</p>
+@if (Model.News.Count() > 0)
+{
+    <table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th>
+                <div>
+                    @Html.DisplayNameFor(model => model.News.First().Id)
+                </div>
+            </th>
+            <th style="width:18%;">
+                <div style="width:50%; float:left; text-align:left">
+                    @Html.DisplayNameFor(model => model.News.First().Title)
+                </div>
+                <div style="width:50%; float:right; text-align:right">
+                    <a asp-controller="News" asp-action="Index"
+                       asp-route-sortType="Title"
+                       asp-route-sortOrder="asc"
+                       asp-route-search="@Model.Search"
+                       asp-route-authorId="@ViewBag.AuthorId"
+                       asp-route-pageSize="@Model.PageSize"
+                       asp-route-pageNumber="@Model.PageNumber" style="text-decoration:none;">
+                        <i class="bi bi-arrow-up"></i>
+                    </a>
+
+                    <a asp-controller="News" asp-action="Index"
+                       asp-route-sortType="Title"
+                       asp-route-sortOrder="desc"
+                       asp-route-search="@Model.Search"
+                       asp-route-authorId="@ViewBag.AuthorId"
+                       asp-route-pageSize="@Model.PageSize"
+                       asp-route-pageNumber="@Model.PageNumber" style="text-decoration:none;">
+                        <i class="bi bi-arrow-down"></i>
+                    </a>
+                </div>
+            </th>
+            <th style="width:30%;">
+                <div style="width:50%; float:left; text-align:left">
+                        @Html.DisplayNameFor(model => model.News.First().Description)
+                </div>
+                <div style="width:50%; float:right; text-align:right">
+                    <a asp-controller="News" asp-action="Index"
+                       asp-route-sortType="Description"
+                       asp-route-sortOrder="asc"
+                       asp-route-search="@Model.Search"
+                       asp-route-authorId="@ViewBag.AuthorId"
+                       asp-route-pageSize="@Model.PageSize"
+                       asp-route-pageNumber="@Model.PageNumber" style="text-decoration:none;">
+                        <i class="bi bi-arrow-up"></i>
+                    </a>
+
+                    <a asp-controller="News" asp-action="Index"
+                       asp-route-sortType="Description"
+                       asp-route-sortOrder="desc"
+                       asp-route-search="@Model.Search"
+                       asp-route-authorId="@ViewBag.AuthorId"
+                       asp-route-pageSize="@Model.PageSize"
+                       asp-route-pageNumber="@Model.PageNumber" style="text-decoration:none;">
+                        <i class="bi bi-arrow-down"></i>
+                    </a>
+                </div>
+            </th>
+            <th style="text-align:center;">
+                Authors @Html.DisplayNameFor(model => model.News.First().Author.UserName)
+            </th>
+            <th style="text-align:center;">
+                @Html.DisplayNameFor(model => model.News.First().ImageUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.News.First().PublicationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.News.First().CreationDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var News in Model.News) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => News.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => News.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => News.Description)
+            </td>
+            <td style="width:15%;" class="text-center">
+                @Html.DisplayFor(modelItem => News.Author.UserName)
+            </td>
+            <td>
+                <img src="@Html.DisplayFor(modelItem => News.ImageUrl)"  alt="@News.Title" style="width:9rem; height:9rem; border-radius:50%;">
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => News.PublicationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => News.CreationDate)
+            </td>
+            <td style="width:4%;">
+                <a class="nav-link text-dark text-center" asp-controller="News" asp-action="Details" asp-route-id="@News.Id">
+                    <i class="bi bi-list-ul"></i>
+                </a>
+            </td>
+            <td style="width:4%;">
+                <a class="nav-link text-dark text-center" asp-controller="News" asp-action="Edit" asp-route-id="@News.Id">
+                    <i class="bi bi-pencil-square"></i>
+                </a>
+            </td>
+                    <td style="width:4%;">
+                <a class="nav-link text-dark text-center" asp-controller="News" asp-action="Delete" asp-route-id="@News.Id">
+                    <i class="bi bi-trash"></i>
+                </a>
+            </td>
+        </tr>
+}
+    </tbody>
+    </table>
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        @if (Model.PageNumber > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" href="?search=@Model.Search&pageSize=@Model.PageSize&pageNumber=@(Model.PageNumber - 1)">Previous</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">Previous</a>
+            </li>
+        }
+
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                <a class="page-link" href="?search=@Model.Search&pageSize=@Model.PageSize&pageNumber=@i">@i</a>
+            </li>
+        }
+
+        @if (Model.PageNumber < Model.TotalPages)
+        {
+            <li class="page-item">
+                <a class="page-link" href="?search=@Model.Search&pageSize=@Model.PageSize&pageNumber=@(Model.PageNumber + 1)">Next</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">Next</a>
+            </li>
+        }
+    </ul>
+</nav>
+
+} else
+{
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>News</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <h3 class="alert alert-danger text-center">No News Found!</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.News.Count > 0)
+{
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h5>News</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @foreach (var News in Model.News)
+                        {
+                            <div class="col-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 style="text-align:center;">@News.Title</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p style="text-align:center;"><img src="@Html.DisplayFor(modelItem => News.ImageUrl)" alt="@News.Title" style="width:12rem; height:12rem; border-radius:10%;"></p>
+                                        <p>@Html.DisplayNameFor(modelItem => News.Description): @News.Description</p>
+                                        <p>@Html.DisplayNameFor(modelItem => News.PublicationDate): @News.PublicationDate</p>
+                                    </div>
+                                    <div class="card-footer" style="text-align:center;">
+                                        <a class="btn" asp-controller="News" asp-action="Details" asp-route-id="@News.Id">
+                                            <i class="bi bi-list-ul"></i>
+                                        </a>
+                                        <a class="btn" asp-controller="News" asp-action="Edit" asp-route-id="@News.Id"><i class="bi bi-pencil-square"></i></a>
+                                        <a class="btn" asp-controller="News" asp-action="Delete" asp-route-id="@News.Id"><i class="bi bi-trash"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

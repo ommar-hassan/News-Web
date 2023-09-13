@@ -1,0 +1,262 @@
+﻿@model NewsApp.Models.AuthorIndexViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<br />
+
+
+    <div class="row mb-2">
+        <form method="get" asp-controller="Authors" asp-action="Index" class="col-4 mb-2" id="search-form">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search" name="search" value="@Model.Search">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+        <form method="get" class="col-4" asp-controller="Authors" asp-action="Index">
+            <div class="input-group">
+                <input type="hidden" name="search" value="@Model.Search" />
+
+                <div class="form-group">
+                    <select id="pageSize" name="pageSize" class="form-control custom-select col-1">
+                        <option value="3" selected="@(Model.PageSize == 3)">3</option>
+                        <option value="5" selected="@(Model.PageSize == 5)">5</option>
+                        <option value="10" selected="@(Model.PageSize == 10)">10</option>
+                        <option value="20" selected="@(Model.PageSize == 20)">20</option>
+                    </select>
+                </div>
+            <button type="submit" class="btn btn-success input-group-append col-1"><i class="bi bi-caret-right-fill"></i></button>
+            </div>
+        </form>
+    </div>
+
+@if (Model.Authors.Count() > 0)
+{
+    <p>
+        <a class="btn btn-success" asp-action="Register">Create New</a>
+    </p>
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>
+                    <div style="width:50%; float:left; text-align:left">
+                        @Html.DisplayNameFor(model => model.Authors.First().FirstName)
+                    </div>
+                    <div style="width:50%; float:right; text-align:right">
+                        <a asp-controller="Authors" asp-action="Index"
+                           asp-route-sortType="FirstName"
+                           asp-route-sortOrder="asc"
+                           asp-route-search="@Model.Search"
+                           asp-route-pageSize="@Model.PageSize"
+                           asp-route-pageNumber="@Model.PageNumber" style="text-decoration:none;">
+                            <i class="bi bi-arrow-up"></i>
+                        </a>
+
+                        <a asp-controller="Authors" asp-action="Index"
+                           asp-route-sortType="FirstName"
+                           asp-route-sortOrder="desc"
+                           asp-route-search="@Model.Search"
+                           asp-route-pageSize="@Model.PageSize"
+                           asp-route-pageNumber="@Model.PageNumber" style="text-decoration:none;">
+                            <i class="bi bi-arrow-down"></i>
+                        </a>
+                    </div>
+                </th>
+                <th>
+                    <div style="width:50%; float:left; text-align:left">
+                        @Html.DisplayNameFor(model => model.Authors.First().LastName)
+                    </div>
+                    <div style="width:50%; float:right; text-align:right">
+                        <a asp-controller="Authors" asp-action="Index"
+                           asp-route-sortType="LastName"
+                           asp-route-sortOrder="asc"
+                           asp-route-search="@Model.Search"
+                           asp-route-pageSize="@Model.PageSize"
+                           asp-route-pageNumber="@Model.PageNumber" style="text-decoration:none;">
+                            <i class="bi bi-arrow-up"></i>
+                        </a>
+
+                        <a asp-controller="Authors" asp-action="Index"
+                           asp-route-sortType="LastName"
+                           asp-route-sortOrder="desc"
+                           asp-route-search="@Model.Search"
+                           asp-route-departmentId="@ViewBag.DepartmentId"
+                           asp-route-pageSize="@Model.PageSize"
+                           asp-route-pageNumber="@Model.PageNumber" style="text-decoration:none;">
+                            <i class="bi bi-arrow-down"></i>
+                        </a>
+                    </div>
+                </th>
+                <th>
+                    <div style="width:50%; float:left; text-align:left">
+                        @Html.DisplayNameFor(model => model.Authors.First().UserName)
+                    </div>
+                    <div style="width:50%; float:right; text-align:right">
+                        <a asp-controller="Authors" asp-action="Index"
+                           asp-route-sortType="UserName"
+                           asp-route-sortOrder="asc"
+                           asp-route-search="@Model.Search"
+                           asp-route-pageSize="@Model.PageSize"
+                           asp-route-pageNumber="@Model.PageNumber" style="text-decoration:none;">
+                            <i class="bi bi-arrow-up"></i>
+                        </a>
+
+                        <a asp-controller="Authors" asp-action="Index"
+                           asp-route-sortType="UserName"
+                           asp-route-sortOrder="desc"
+                           asp-route-search="@Model.Search"
+                           asp-route-departmentId="@ViewBag.DepartmentId"
+                           asp-route-pageSize="@Model.PageSize"
+                           asp-route-pageNumber="@Model.PageNumber" style="text-decoration:none;">
+                            <i class="bi bi-arrow-down"></i>
+                        </a>
+                    </div>
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Authors.First().Email)
+                </th>
+                <th style="text-align:center;">
+                    @Html.DisplayNameFor(model => model.Authors.First().IsAuthenticated)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var Author in Model.Authors)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => Author.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Author.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Author.UserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Author.Email)
+                    </td>
+                    <td style="text-align:center;">
+                        @Html.DisplayFor(modelItem => Author.IsAuthenticated)
+                    </td>
+                    <td>
+                        <a class="nav-link text-dark" asp-controller="Authors" asp-action="GetAuthor" asp-route-id="@Author.Id">
+                            <i class="bi bi-list-ul"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="nav-link text-dark text-center" asp-controller="Authors" asp-action="Edit" asp-route-id="@Author.Id">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="nav-link text-dark text-center" asp-controller="Authors" asp-action="Delete" asp-route-id="@Author.Id">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            @if (Model.PageNumber > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="?search=@Model.Search&pageSize=@Model.PageSize&pageNumber=@(Model.PageNumber - 1)">Previous</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" href="?search=@Model.Search&pageSize=@Model.PageSize&pageNumber=@i">@i</a>
+                </li>
+            }
+
+            @if (Model.PageNumber < Model.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="?search=@Model.Search&pageSize=@Model.PageSize&pageNumber=@(Model.PageNumber + 1)">Next</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Next</a>
+                </li>
+            }
+        </ul>
+    </nav>
+} else
+{
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h2>Authors</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <h3 class="alert alert-danger text-center">No Authors Found!</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+}
+
+@if (Model.Authors.Count > 0)
+{
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h5>Authors</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @foreach (var Author in Model.Authors)
+                        {
+                            <div class="col-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 style="text-align:center;">@Author.FirstName @Author.LastName</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>@Html.DisplayNameFor(modelItem => Author.Email): @Author.Email</p>
+                                        <p>@Html.DisplayNameFor(modelItem => Author.UserName): @Author.UserName</p>
+                                        <p>@Html.DisplayNameFor(modelItem => Author.IsAuthenticated): @Author.IsAuthenticated</p>
+                                    </div>
+                                    <div class="card-footer" style="text-align:center;">
+                                        <a class="btn" asp-controller="Authors" asp-action="GetAuthor" asp-route-id="@Author.Id">
+                                            <i class="bi bi-list-ul"></i>
+                                        </a>
+                                        <a class="btn" asp-controller="Authors" asp-action="Edit" asp-route-id="@Author.Id"><i class="bi bi-pencil-square"></i></a>
+                                        <a class="btn" asp-controller="Authors" asp-action="Delete" asp-route-id="@Author.Id"><i class="bi bi-trash"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
